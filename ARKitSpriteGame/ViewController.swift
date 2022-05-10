@@ -1,9 +1,8 @@
 //
 //  ViewController.swift
-//  ARSpriteKit
+//  ARKitSpriteGame
 //
-//  Created by Esteban Herrera on 7/4/17.
-//  Copyright © 2017 Esteban Herrera. All rights reserved.
+//  Created by Guilherme - ília on 09/05/22.
 //
 
 import UIKit
@@ -24,6 +23,11 @@ class ViewController: UIViewController, ARSKViewDelegate {
         sceneView.showsFPS = true
         sceneView.showsNodeCount = true
         
+        // Load the SKScene from 'Scene.sks'
+        if let scene = SKScene(fileNamed: "Scene") {
+            sceneView.presentScene(scene)
+        }
+        
         let scene = Scene(size: sceneView.bounds.size)
         scene.scaleMode = .resizeFill
         sceneView.presentScene(scene)
@@ -34,7 +38,6 @@ class ViewController: UIViewController, ARSKViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
-        //configuration.planeDetection = .horizontal
         
         // Run the view's session
         sceneView.session.run(configuration)
@@ -47,18 +50,10 @@ class ViewController: UIViewController, ARSKViewDelegate {
         sceneView.session.pause()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
-    }
-    
-    func randomInt(min: Int, max: Int) -> Int {
-        return min + Int(arc4random_uniform(UInt32(max - min + 1)))
-    }
-    
     // MARK: - ARSKViewDelegate
     
     func view(_ view: ARSKView, nodeFor anchor: ARAnchor) -> SKNode? {
+        // Create and configure a node for the anchor added to the view's session.
         let ghostId = randomInt(min: 1, max: 6)
         
         let node = SKSpriteNode(imageNamed: "ghost\(ghostId)")
@@ -80,5 +75,11 @@ class ViewController: UIViewController, ARSKViewDelegate {
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
+    }
+}
+
+extension ViewController {
+    func randomInt(min: Int, max: Int) -> Int {
+        return min + Int(arc4random_uniform(UInt32(max - min + 1)))
     }
 }
